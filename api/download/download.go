@@ -8,12 +8,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/mempler/cheesegull/config"
+	"github.com/Mempler/cheesegull/config"
 
-	"github.com/mempler/cheesegull/api"
-	"github.com/mempler/cheesegull/downloader"
-	"github.com/mempler/cheesegull/housekeeper"
-	"github.com/mempler/cheesegull/models"
+	"github.com/Mempler/cheesegull/api"
+	"github.com/Mempler/cheesegull/downloader"
+	"github.com/Mempler/cheesegull/housekeeper"
+	"github.com/Mempler/cheesegull/models"
 )
 
 var unrankedBeatmaps bool

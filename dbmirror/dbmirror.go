@@ -8,8 +8,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/Mempler/cheesegull/models"
 	raven "github.com/getsentry/raven-go"
-	"github.com/mempler/cheesegull/models"
 	osuapi "github.com/thehowl/go-osuapi"
 )
 
