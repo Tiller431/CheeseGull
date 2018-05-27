@@ -9,7 +9,7 @@ import (
 	"time"
 
 	raven "github.com/getsentry/raven-go"
-	"github.com/osuripple/cheesegull/models"
+	"github.com/mempler/cheesegull/models"
 	osuapi "github.com/thehowl/go-osuapi"
 )
 

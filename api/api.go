@@ -15,8 +15,8 @@ import (
 	raven "github.com/getsentry/raven-go"
 	"github.com/julienschmidt/httprouter"
 
-	"github.com/osuripple/cheesegull/downloader"
-	"github.com/osuripple/cheesegull/housekeeper"
+	"github.com/mempler/cheesegull/downloader"
+	"github.com/mempler/cheesegull/housekeeper"
 )
 
 // Context is the information that is passed to all request handlers in relation
