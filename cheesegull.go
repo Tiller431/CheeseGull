@@ -30,6 +30,13 @@ const searchDSNDocs = `"DSN to use for fulltext searches. ` +
 	`successfully, however what happens when search is tried is undefined ` +
 	`behaviour and you should definetely bother to set it up (follow the README).`
 
+// CheeseGull is a webserver that functions as a cache middleman between the
+// official osu! mirrors and requesters of beatmaps, as well as also a cache
+// middleman for beatmaps metadata retrieved from the official osu! API.
+
+// Version is the version of cheesegull.
+const Version = "v2.1.3gigamons"
+
 var (
 	conf = config.Parse()
 )
