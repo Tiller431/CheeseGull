@@ -8,11 +8,20 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/osuripple/cheesegull/config"
+
 	"github.com/osuripple/cheesegull/api"
 	"github.com/osuripple/cheesegull/downloader"
 	"github.com/osuripple/cheesegull/housekeeper"
 	"github.com/osuripple/cheesegull/models"
 )
+
+var unrankedBeatmaps bool
+
+func init() {
+	c := config.Parse()
+	unrankedBeatmaps = c.Server.UnrankedBeatmaps
+}
 
 func errorMessage(c *api.Context, code int, err string) {
 	c.WriteHeader("Content-Type", "text/plain; charset=utf-8")
@@ -45,7 +54,7 @@ func Download(c *api.Context) {
 		errorMessage(c, 404, "Set not found")
 		return
 	}
-	if set.RankedStatus <= 0 {
+	if !unrankedBeatmaps && set.RankedStatus <= 0 {
 		errorMessage(c, 406, "Unranked beatmap sets are currently not available for download, following a warning")
 		return
 	}

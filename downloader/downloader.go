@@ -14,8 +14,10 @@ import (
 	"strconv"
 )
 
+var downloadHostname = "old.ppy.sh"
+
 // LogIn logs in into an osu! account and returns a Client.
-func LogIn(username, password string) (*Client, error) {
+func LogIn(username, password string, downloadhostname string) (*Client, error) {
 	j, err := cookiejar.New(&cookiejar.Options{})
 	if err != nil {
 		return nil, err
@@ -37,6 +39,12 @@ func LogIn(username, password string) (*Client, error) {
 	if loginResp.Request.URL.Path != "/" {
 		return nil, errors.New("downloader: Login: could not log in (was not redirected to index)")
 	}
+
+	downloadHostname = downloadhostname
+	if downloadhostname == "" {
+		downloadHostname = "old.ppy.sh"
+	}
+
 	return (*Client)(c), nil
 }
 
@@ -78,10 +86,11 @@ var ErrNoRedirect = errors.New("no redirect happened, beatmap could not be downl
 func (c *Client) getReader(str string) (io.ReadCloser, error) {
 	h := (*http.Client)(c)
 
-	resp, err := h.Get("https://old.ppy.sh/d/" + str)
+	resp, err := h.Get(fmt.Sprintf("https://%s/d/", downloadHostname) + str)
 	if err != nil {
 		return nil, err
 	}
+
 	if resp.Request.URL.Host == "old.ppy.sh" {
 		resp.Body.Close()
 		return nil, ErrNoRedirect

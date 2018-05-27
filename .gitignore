@@ -1,3 +1,4 @@
 /cheesegull
 /data/*
 !/data/.gitkeep
+config.json

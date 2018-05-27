@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -13,6 +14,7 @@ import (
 	osuapi "github.com/thehowl/go-osuapi"
 
 	"github.com/osuripple/cheesegull/api"
+	"github.com/osuripple/cheesegull/config"
 	"github.com/osuripple/cheesegull/dbmirror"
 	"github.com/osuripple/cheesegull/downloader"
 	"github.com/osuripple/cheesegull/housekeeper"
@@ -30,13 +32,7 @@ const searchDSNDocs = `"DSN to use for fulltext searches. ` +
 	`behaviour and you should definetely bother to set it up (follow the README).`
 
 var (
-	osuAPIKey   = kingpin.Flag("api-key", "osu! API key").Short('k').Envar("OSU_API_KEY").String()
-	osuUsername = kingpin.Flag("osu-username", "osu! username (for downloading and fetching whether a beatmap has a video)").Short('u').Envar("OSU_USERNAME").String()
-	osuPassword = kingpin.Flag("osu-password", "osu! password (for downloading and fetching whether a beatmap has a video)").Short('p').Envar("OSU_PASSWORD").String()
-	mysqlDSN    = kingpin.Flag("mysql-dsn", "DSN of MySQL").Short('m').Default("root@/cheesegull").Envar("MYSQL_DSN").String()
-	searchDSN   = kingpin.Flag("search-dsn", searchDSNDocs).Default("root@tcp(127.0.0.1:9306)/cheesegull").Envar("SEARCH_DSN").String()
-	httpAddr    = kingpin.Flag("http-addr", "Address on which to take HTTP requests.").Short('a').Default("127.0.0.1:62011").String()
-	maxDisk     = kingpin.Flag("max-disk", "Maximum number of GB used by beatmap cache.").Default("10").Envar("MAXIMUM_DISK").Float64()
+	conf = config.Parse()
 )
 
 func addTimeParsing(dsn string) string {
@@ -50,15 +46,16 @@ func addTimeParsing(dsn string) string {
 
 func main() {
 	kingpin.Parse()
+	const Version = "v2.1.1"
 
 	fmt.Println("CheeseGull", Version)
 	api.Version = Version
 
 	// set up osuapi client
-	c := osuapi.NewClient(*osuAPIKey)
+	c := osuapi.NewClient(conf.Osu.APIKey)
 
 	// set up downloader
-	d, err := downloader.LogIn(*osuUsername, *osuPassword)
+	d, err := downloader.LogIn(conf.Osu.Username, conf.Osu.Password, conf.Osu.DownloadHostname)
 	if err != nil {
 		fmt.Println("Can't log in into osu!:", err)
 		os.Exit(1)
@@ -66,14 +63,14 @@ func main() {
 	dbmirror.SetHasVideo(d.HasVideo)
 
 	// set up mysql
-	db, err := sql.Open("mysql", addTimeParsing(*mysqlDSN))
+	db, err := sql.Open("mysql", addTimeParsing(conf.MySQL.Username+":"+conf.MySQL.Password+"@tcp("+conf.MySQL.Hostname+":"+strconv.Itoa(conf.MySQL.Port)+")/"+conf.MySQL.Database))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	// set up search
-	db2, err := sql.Open("mysql", *searchDSN)
+	db2, err := sql.Open("mysql", conf.SphinxQL.Username+":"+conf.SphinxQL.Password+"@"+conf.SphinxQL.Hostname+":"+strconv.Itoa(conf.SphinxQL.Port)+"/"+conf.SphinxQL.Database)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -86,7 +83,7 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	house.MaxSize = uint64(float64(1024*1024*1024) * (*maxDisk))
+	house.MaxSize = uint64(float64(1024*1024*1024) * (conf.Server.BMCacheSize))
 	house.StartCleaner()
 
 	// run mysql migrations
@@ -96,9 +93,11 @@ func main() {
 	}
 
 	// start running components of cheesegull
-	go dbmirror.StartSetUpdater(c, db)
-	go dbmirror.DiscoverEvery(c, db, time.Hour*6, time.Second*20)
+	if conf.Server.ShouldDiscover {
+		go dbmirror.StartSetUpdater(c, db)
+		go dbmirror.DiscoverEvery(c, db, time.Hour*6, time.Second*20)
+	}
 
 	// create request handler
-	panic(http.ListenAndServe(*httpAddr, api.CreateHandler(db, db2, house, d)))
+	panic(http.ListenAndServe(conf.Server.Hostname+":"+strconv.Itoa(conf.Server.Port), api.CreateHandler(db, db2, house, d)))
 }
