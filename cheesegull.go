@@ -73,7 +73,7 @@ func main() {
 	}
 
 	// set up search
-	db2, err := sql.Open("mysql", conf.SphinxQL.Username+":"+conf.SphinxQL.Password+"@"+conf.SphinxQL.Hostname+":"+strconv.Itoa(conf.SphinxQL.Port)+"/"+conf.SphinxQL.Database)
+	db2, err := sql.Open("mysql", conf.SphinxQL.Username+":"+conf.SphinxQL.Password+"@tcp("+conf.SphinxQL.Hostname+":"+strconv.Itoa(conf.SphinxQL.Port)+")/"+conf.SphinxQL.Database)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
