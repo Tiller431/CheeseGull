@@ -1,6 +1,6 @@
 <p align="center"><img src="https://y.zxq.co/jobeei.png"></p>
 
-# CheeseGull [![Build Status](https://travis-ci.org/osuripple/cheesegull.svg?branch=master)](https://travis-ci.org/osuripple/cheesegull)
+# CheeseGull [![Build Status](https://travis-ci.org/Mempler/cheesegull.svg?branch=master)](https://travis-ci.org/Mempler/cheesegull) [![CodeFactor](https://www.codefactor.io/repository/github/mempler/cheesegull/badge)](https://www.codefactor.io/repository/github/mempler/cheesegull)
 
 CheeseGull creates an unofficial "slave" database of the official osu! beatmap
 database, trying to keep every beatmap up to date as much as possible, as well

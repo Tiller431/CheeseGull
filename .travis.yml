@@ -1,7 +1,9 @@
 language: go
 go:
-  - 1.9
+  - 1.10
+
 script:
-  - go build -v
+  - go build -v cheesegull.go
+
 after_success:
   - test -n "$TRAVIS_TAG" && curl -sL https://git.io/goreleaser | bash

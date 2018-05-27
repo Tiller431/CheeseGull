@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alecthomas/kingpin"
 	_ "github.com/go-sql-driver/mysql"
 	osuapi "github.com/thehowl/go-osuapi"
 
@@ -45,8 +44,6 @@ func addTimeParsing(dsn string) string {
 }
 
 func main() {
-	kingpin.Parse()
-
 	fmt.Println("CheeseGull", Version)
 	api.Version = Version
 
