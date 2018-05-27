@@ -46,7 +46,6 @@ func addTimeParsing(dsn string) string {
 
 func main() {
 	kingpin.Parse()
-	const Version = "v2.1.1"
 
 	fmt.Println("CheeseGull", Version)
 	api.Version = Version
