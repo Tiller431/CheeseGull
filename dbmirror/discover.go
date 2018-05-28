@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/Gigamons/cheesegull/logger"
 	"github.com/Gigamons/cheesegull/models"
 	osuapi "github.com/thehowl/go-osuapi"
 )
@@ -25,6 +26,7 @@ func Discover(c *osuapi.Client, db *sql.DB) error {
 		if id%64 == 0 {
 			log.Println("[D]", id)
 		}
+		logger.Debug("try to Discover BeatmapID %v", id)
 		var (
 			err error
 			bms []osuapi.Beatmap
@@ -55,6 +57,8 @@ func Discover(c *osuapi.Client, db *sql.DB) error {
 		if err != nil {
 			return err
 		}
+
+		logger.Debug("Add beatmap set %v to Database", set.ID)
 
 		err = models.CreateSet(db, set)
 		if err != nil {

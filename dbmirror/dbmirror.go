@@ -8,6 +8,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/Gigamons/cheesegull/logger"
+
 	"github.com/Gigamons/cheesegull/models"
 	raven "github.com/getsentry/raven-go"
 	osuapi "github.com/thehowl/go-osuapi"
@@ -84,6 +86,7 @@ func updateSet(c *osuapi.Client, db *sql.DB, set models.Set) error {
 		err error
 		bms []osuapi.Beatmap
 	)
+	logger.Debug("Update set %v", set.ID)
 	for i := 0; i < 5; i++ {
 		bms, err = c.GetBeatmaps(osuapi.GetBeatmapsOpts{
 			BeatmapSetID: set.ID,
@@ -96,6 +99,7 @@ func updateSet(c *osuapi.Client, db *sql.DB, set models.Set) error {
 		}
 	}
 	if len(bms) == 0 {
+		logger.Debug("Delete set %v", set.ID)
 		// set has been deleted from osu!, so we do the same thing
 		return models.DeleteSet(db, set.ID)
 	}
@@ -114,6 +118,8 @@ func updateSet(c *osuapi.Client, db *sql.DB, set models.Set) error {
 			return err
 		}
 	}
+
+	logger.Debug("Add set %v", set.ID)
 
 	return models.CreateSet(db, set)
 }

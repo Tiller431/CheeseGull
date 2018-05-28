@@ -17,6 +17,7 @@ import (
 	"github.com/Gigamons/cheesegull/dbmirror"
 	"github.com/Gigamons/cheesegull/downloader"
 	"github.com/Gigamons/cheesegull/housekeeper"
+	"github.com/Gigamons/cheesegull/logger"
 	"github.com/Gigamons/cheesegull/models"
 
 	// Components of the API we want to use
@@ -52,6 +53,7 @@ func main() {
 
 	conf := config.Parse()
 	// set up osuapi client
+	logger.Debug("Create new Osu! APIClient")
 	c := osuapi.NewClient(conf.Osu.APIKey)
 
 	// set up downloader
@@ -62,6 +64,7 @@ func main() {
 	}
 	dbmirror.SetHasVideo(d.HasVideo)
 
+	logger.Debug("Connect to MySQL")
 	// set up mysql
 	db, err := sql.Open("mysql", addTimeParsing(conf.MySQL.Username+":"+conf.MySQL.Password+"@tcp("+conf.MySQL.Hostname+":"+strconv.Itoa(conf.MySQL.Port)+")/"+conf.MySQL.Database))
 	if err != nil {
@@ -69,6 +72,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	logger.Debug("Connect to SphinxQL")
 	// set up search
 	db2, err := sql.Open("mysql", conf.SphinxQL.Username+":"+conf.SphinxQL.Password+"@tcp("+conf.SphinxQL.Hostname+":"+strconv.Itoa(conf.SphinxQL.Port)+")/"+conf.SphinxQL.Database)
 	if err != nil {
@@ -76,6 +80,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	logger.Debug("Create housekeeper")
 	// set up housekeeper
 	house := housekeeper.New()
 	err = house.LoadState()
@@ -86,6 +91,7 @@ func main() {
 	house.MaxSize = uint64(float64(1024*1024*1024) * (conf.Server.BMCacheSize))
 	house.StartCleaner()
 
+	logger.Debug("Migrate latest Database.")
 	// run mysql migrations
 	err = models.RunMigrations(db)
 	if err != nil {
@@ -94,10 +100,12 @@ func main() {
 
 	// start running components of cheesegull
 	if conf.Server.ShouldDiscover {
+		logger.Debug("Start discovering!")
 		go dbmirror.StartSetUpdater(c, db)
 		go dbmirror.DiscoverEvery(c, db, time.Hour*6, time.Second*20)
 	}
 
 	// create request handler
+	logger.Debug("Start listening at port %v", conf.Server.Port)
 	panic(http.ListenAndServe(conf.Server.Hostname+":"+strconv.Itoa(conf.Server.Port), api.CreateHandler(db, db2, house, d)))
 }

@@ -16,6 +16,7 @@ type Config struct {
 		BMCacheSize      float64
 		Hostname         string
 		Port             int
+		Debug            bool
 	}
 	Osu struct {
 		DownloadHostname string // Good for CDN Support.

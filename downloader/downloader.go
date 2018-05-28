@@ -12,12 +12,15 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 	"strconv"
+
+	"github.com/Gigamons/cheesegull/logger"
 )
 
 var downloadHostname = "old.ppy.sh"
 
 // LogIn logs in into an osu! account and returns a Client.
 func LogIn(username, password string, downloadhostname string) (*Client, error) {
+	logger.Debug("Try to Login into Osu!")
 	j, err := cookiejar.New(&cookiejar.Options{})
 	if err != nil {
 		return nil, err
@@ -42,6 +45,7 @@ func LogIn(username, password string, downloadhostname string) (*Client, error) 
 
 	downloadHostname = downloadhostname
 	if downloadhostname == "" {
+		logger.Debug("WARNING! set downloadHostname to Default old.ppy.sh")
 		downloadHostname = "old.ppy.sh"
 	}
 
@@ -54,15 +58,18 @@ type Client http.Client
 
 // HasVideo checks whether a beatmap has a video.
 func (c *Client) HasVideo(setID int) (bool, error) {
+	logger.Debug("Check if SetID %v has Video.", setID)
 	h := (*http.Client)(c)
 
 	page, err := h.Get(fmt.Sprintf("https://old.ppy.sh/s/%d", setID))
 	if err != nil {
+		logger.Debug("SetID %v don't has video!", setID)
 		return false, err
 	}
 	defer page.Body.Close()
 	body, err := ioutil.ReadAll(page.Body)
 	if err != nil {
+		logger.Debug("SetID %v has video!", setID)
 		return false, err
 	}
 	return bytes.Contains(body, []byte(fmt.Sprintf(`href="/d/%dn"`, setID))), nil
@@ -75,6 +82,8 @@ func (c *Client) Download(setID int, noVideo bool) (io.ReadCloser, error) {
 	if noVideo {
 		suffix = "n"
 	}
+
+	logger.Debug("Download SetID %v. has video: %t", setID, noVideo)
 
 	return c.getReader(strconv.Itoa(setID) + suffix)
 }
