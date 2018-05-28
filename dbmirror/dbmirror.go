@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/Mempler/cheesegull/models"
+	"github.com/Gigamons/cheesegull/models"
 	raven "github.com/getsentry/raven-go"
 	osuapi "github.com/thehowl/go-osuapi"
 )

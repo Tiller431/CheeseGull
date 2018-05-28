@@ -12,16 +12,16 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	osuapi "github.com/thehowl/go-osuapi"
 
-	"github.com/Mempler/cheesegull/api"
-	"github.com/Mempler/cheesegull/config"
-	"github.com/Mempler/cheesegull/dbmirror"
-	"github.com/Mempler/cheesegull/downloader"
-	"github.com/Mempler/cheesegull/housekeeper"
-	"github.com/Mempler/cheesegull/models"
+	"github.com/Gigamons/cheesegull/api"
+	"github.com/Gigamons/cheesegull/config"
+	"github.com/Gigamons/cheesegull/dbmirror"
+	"github.com/Gigamons/cheesegull/downloader"
+	"github.com/Gigamons/cheesegull/housekeeper"
+	"github.com/Gigamons/cheesegull/models"
 
 	// Components of the API we want to use
-	_ "github.com/Mempler/cheesegull/api/download"
-	_ "github.com/Mempler/cheesegull/api/metadata"
+	_ "github.com/Gigamons/cheesegull/api/download"
+	_ "github.com/Gigamons/cheesegull/api/metadata"
 )
 
 const searchDSNDocs = `"DSN to use for fulltext searches. ` +

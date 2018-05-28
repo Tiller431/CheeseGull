@@ -3,7 +3,7 @@ package api
 import (
 	"expvar"
 
-	"github.com/Mempler/cheesegull/config"
+	"github.com/Gigamons/cheesegull/config"
 )
 
 // Version is set by main and it is given to requests at /

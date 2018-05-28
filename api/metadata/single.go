@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Mempler/cheesegull/api"
-	"github.com/Mempler/cheesegull/models"
+	"github.com/Gigamons/cheesegull/api"
+	"github.com/Gigamons/cheesegull/models"
 )
 
 // Beatmap handles requests to retrieve single beatmaps.

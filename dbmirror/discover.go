@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/Mempler/cheesegull/models"
+	"github.com/Gigamons/cheesegull/models"
 	osuapi "github.com/thehowl/go-osuapi"
 )
 
