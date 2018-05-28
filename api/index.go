@@ -2,6 +2,8 @@ package api
 
 import (
 	"expvar"
+	"io/ioutil"
+	"os"
 
 	"github.com/Gigamons/cheesegull/config"
 )
@@ -10,8 +12,17 @@ import (
 var Version = "v2.DEV"
 
 func index(c *Context) {
-	c.WriteHeader("Content-Type", "text/plain; charset=utf-8")
-	c.Write([]byte(config.Parse().Server.Website))
+	c.WriteHeader("Content-Type", "text/html; charset=utf-8")
+	if _, err := os.Stat("index.html"); os.IsNotExist(err) {
+		c.Write([]byte(config.Parse().Server.Website))
+	} else {
+		f, err := ioutil.ReadFile("index.html")
+		if err != nil {
+			c.Write([]byte(config.Parse().Server.Website))
+			return
+		}
+		c.Write(f)
+	}
 }
 
 var _evh = expvar.Handler()
