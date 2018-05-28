@@ -37,10 +37,6 @@ const searchDSNDocs = `"DSN to use for fulltext searches. ` +
 // Version is the version of cheesegull.
 const Version = "v2.1.3gigamons"
 
-var (
-	conf = config.Parse()
-)
-
 func addTimeParsing(dsn string) string {
 	sep := "?"
 	if strings.Contains(dsn, "?") {
@@ -54,6 +50,7 @@ func main() {
 	fmt.Println("CheeseGull", Version)
 	api.Version = Version
 
+	conf := config.Parse()
 	// set up osuapi client
 	c := osuapi.NewClient(conf.Osu.APIKey)
 

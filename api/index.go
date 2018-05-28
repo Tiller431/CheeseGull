@@ -2,6 +2,8 @@ package api
 
 import (
 	"expvar"
+
+	"github.com/Mempler/cheesegull/config"
 )
 
 // Version is set by main and it is given to requests at /
@@ -9,7 +11,7 @@ var Version = "v2.DEV"
 
 func index(c *Context) {
 	c.WriteHeader("Content-Type", "text/plain; charset=utf-8")
-	c.Write([]byte("CheeseGull " + Version + " Woo\nFor more information: https://github.com/osuripple/cheesegull"))
+	c.Write([]byte(config.Parse().Server.Website))
 }
 
 var _evh = expvar.Handler()

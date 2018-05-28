@@ -12,6 +12,7 @@ type Config struct {
 	Server struct {
 		ShouldDiscover   bool
 		UnrankedBeatmaps bool
+		Website          string
 		BMCacheSize      float64
 		Hostname         string
 		Port             int
@@ -75,6 +76,7 @@ func create() {
 		c.SphinxQL.Database = "cheesegull"
 		c.SphinxQL.Hostname = "127.0.0.1"
 		c.SphinxQL.Port = 9306
+		c.Server.Website = fmt.Sprintf("CheeseGull V2.1.3 Gigamons edition. \nOriginal: https://github.com/osuripple/cheesegull\nFork (Gigamons Edition): https://github.com/Mempler/cheesegull")
 
 		j, err := json.MarshalIndent(&c, "", "    ")
 		if err != nil {
