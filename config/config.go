@@ -77,7 +77,7 @@ func create() {
 		c.SphinxQL.Database = "cheesegull"
 		c.SphinxQL.Hostname = "127.0.0.1"
 		c.SphinxQL.Port = 9306
-		c.Server.Website = fmt.Sprintf("\"Website\": \"<font face='Comic Sans MS' size='2'><h2>CHEESEGULL V2.1.4G</h2></font><font face='Consolas' size='2'><b>Mirror Server:</b> Unknown <br><b>Maintainer:</b> <a href='mailto:UNKNOWN'>UNKNOWN</a><br><b>Original Source:</b> <a href='https://github.com/osuripple/cheesegull'>https://github.com/osuripple/cheesegull</a><br><b>Custom Fork:</b> <a href='https://github.com/gigamons/cheesegull'>https://github.com/gigamons/cheesegull</a><br><br><i>*: Using the custom gigamons fork.</i></font>")
+		c.Server.Website = fmt.Sprintf("\"Website\": \"<font face='Comic Sans MS' size='2'><h2>CHEESEGULL V2.1.4G*</h2></font><font face='Consolas' size='2'><b>Mirror Server:</b> Unknown <br><b>Maintainer:</b> <a href='mailto:UNKNOWN'>UNKNOWN</a><br><b>Original Source:</b> <a href='https://github.com/osuripple/cheesegull'>https://github.com/osuripple/cheesegull</a><br><b>Custom Fork:</b> <a href='https://github.com/gigamons/cheesegull'>https://github.com/gigamons/cheesegull</a><br><br><i>*: Using the custom gigamons fork.</i></font>")
 
 		j, err := json.MarshalIndent(&c, "", "    ")
 		if err != nil {
