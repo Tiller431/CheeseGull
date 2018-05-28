@@ -68,7 +68,7 @@ func main() {
 	// set up mysql
 	db, err := sql.Open("mysql", addTimeParsing(conf.MySQL.Username+":"+conf.MySQL.Password+"@tcp("+conf.MySQL.Hostname+":"+strconv.Itoa(conf.MySQL.Port)+")/"+conf.MySQL.Database))
 	if err != nil {
-		fmt.Println(err)
+		logger.Error(err.Error())
 		os.Exit(1)
 	}
 
@@ -76,6 +76,7 @@ func main() {
 	// set up search
 	db2, err := sql.Open("mysql", conf.SphinxQL.Username+":"+conf.SphinxQL.Password+"@tcp("+conf.SphinxQL.Hostname+":"+strconv.Itoa(conf.SphinxQL.Port)+")/"+conf.SphinxQL.Database)
 	if err != nil {
+		logger.Error(err.Error())
 		fmt.Println(err)
 		os.Exit(1)
 	}
@@ -95,7 +96,8 @@ func main() {
 	// run mysql migrations
 	err = models.RunMigrations(db)
 	if err != nil {
-		fmt.Println("Error running migrations", err)
+		logger.Error("Error running migrations")
+		fmt.Println(err)
 	}
 
 	// start running components of cheesegull

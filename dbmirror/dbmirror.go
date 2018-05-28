@@ -4,7 +4,6 @@ package dbmirror
 
 import (
 	"database/sql"
-	"log"
 	"os"
 	"time"
 
@@ -159,7 +158,7 @@ func StartSetUpdater(c *osuapi.Client, db *sql.DB) {
 			setQueue <- set
 		}
 		if len(sets) > 0 {
-			log.Printf("[U] Updating sets, oldest LastChecked %v, newest %v, total length %d",
+			logger.Info("[U] Updating sets, oldest LastChecked %v, newest %v, total length %d",
 				sets[0].LastChecked,
 				sets[len(sets)-1].LastChecked,
 				len(sets),
@@ -179,5 +178,5 @@ func logError(err error) {
 	if envSentryDSN != "" {
 		raven.CaptureError(err, nil)
 	}
-	log.Println(err)
+	logger.Error(err.Error())
 }
