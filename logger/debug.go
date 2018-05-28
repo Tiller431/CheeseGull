@@ -11,6 +11,10 @@ import (
 func Debug(message string, v ...interface{}) {
 	conf := config.Parse()
 	if conf.Server.Debug {
-		log.Printf(prefix(color.YellowString("D"))+message, v)
+		if len(v) < 1 {
+			log.Println(prefix(color.YellowString("D")), message)
+		} else {
+			log.Printf(prefix(color.YellowString("D"))+message+"\n", v)
+		}
 	}
 }

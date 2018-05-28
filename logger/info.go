@@ -8,5 +8,9 @@ import (
 
 // Info logs information.
 func Info(message string, v ...interface{}) {
-	log.Printf(prefix(color.CyanString("I"))+message, v)
+	if len(v) < 1 {
+		log.Printf(prefix(color.CyanString("I")), message)
+	} else {
+		log.Printf(prefix(color.CyanString("I"))+message+"\n", v)
+	}
 }
