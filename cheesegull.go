@@ -35,7 +35,7 @@ const searchDSNDocs = `"DSN to use for fulltext searches. ` +
 // middleman for beatmaps metadata retrieved from the official osu! API.
 
 // Version is the version of cheesegull.
-const Version = "v2.1.3gigamons"
+const Version = "v2.1.4gigamons"
 
 func addTimeParsing(dsn string) string {
 	sep := "?"
