@@ -9,7 +9,7 @@ import (
 // Info logs information.
 func Info(message string, v ...interface{}) {
 	if len(v) < 1 {
-		log.Printf(prefix(color.CyanString("I")), message)
+		log.Println(prefix(color.CyanString("I")), message)
 	} else {
 		log.Printf(prefix(color.CyanString("I"))+message+"\n", v)
 	}
