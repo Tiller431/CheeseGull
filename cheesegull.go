@@ -74,6 +74,7 @@ func main() {
 
 	logger.Debug("Connect to SphinxQL")
 	// set up search
+	logger.Debug(strings.Trim(conf.SphinxQL.Username+":"+conf.SphinxQL.Password+"@tcp("+conf.SphinxQL.Hostname+":"+strconv.Itoa(conf.SphinxQL.Port)+")/"+conf.SphinxQL.Database, "\x00"))
 	db2, err := sql.Open("mysql", strings.Trim(conf.SphinxQL.Username+":"+conf.SphinxQL.Password+"@tcp("+conf.SphinxQL.Hostname+":"+strconv.Itoa(conf.SphinxQL.Port)+")/"+conf.SphinxQL.Database, "\x00"))
 	if err != nil {
 		logger.Error(err.Error())
