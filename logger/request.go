@@ -11,6 +11,6 @@ func Request(message string, v ...interface{}) {
 	if len(v) < 1 {
 		log.Println(prefix(color.GreenString("R")), message)
 	} else {
-		log.Printf(prefix(color.GreenString("R"))+message+"\n", v)
+		log.Printf(prefix(color.GreenString("R"))+message+"\n", v...)
 	}
 }

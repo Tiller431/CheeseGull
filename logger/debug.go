@@ -14,7 +14,7 @@ func Debug(message string, v ...interface{}) {
 		if len(v) < 1 {
 			log.Println(prefix(color.YellowString("D")), message)
 		} else {
-			log.Printf(prefix(color.YellowString("D"))+message+"\n", v)
+			log.Printf(prefix(color.YellowString("D"))+message+"\n", v...)
 		}
 	}
 }

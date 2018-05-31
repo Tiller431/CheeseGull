@@ -11,6 +11,6 @@ func Error(message string, v ...interface{}) {
 	if len(v) < 1 {
 		log.Println(prefix(color.RedString("ERR")), message)
 	} else {
-		log.Printf(prefix(color.RedString("ERR"))+message+"\n", v)
+		log.Printf(prefix(color.RedString("ERR"))+message+"\n", v...)
 	}
 }
