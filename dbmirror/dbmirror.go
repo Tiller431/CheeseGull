@@ -158,7 +158,7 @@ func StartSetUpdater(c *osuapi.Client, db *sql.DB) {
 			setQueue <- set
 		}
 		if len(sets) > 0 {
-			logger.Info("[U] Updating sets, oldest LastChecked %v, newest %v, total length %d",
+			logger.Info("Updating sets, oldest LastChecked %s, newest %s, total length %v",
 				sets[0].LastChecked,
 				sets[len(sets)-1].LastChecked,
 				len(sets),

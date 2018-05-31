@@ -17,6 +17,7 @@ import (
 
 	"github.com/Gigamons/cheesegull/downloader"
 	"github.com/Gigamons/cheesegull/housekeeper"
+	"github.com/Gigamons/cheesegull/logger"
 )
 
 // Context is the information that is passed to all request handlers in relation
@@ -129,7 +130,7 @@ func CreateHandler(db, searchDB *sql.DB, house *housekeeper.House, dlc *download
 				debug.PrintStack()
 			}()
 			h.f(ctx)
-			log.Printf("[R] %-10s %-4s %s\n",
+			logger.Info("Request %-10s %-4s %s\n",
 				time.Since(start).String(),
 				r.Method,
 				r.URL.Path,
