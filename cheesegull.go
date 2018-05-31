@@ -74,9 +74,14 @@ func main() {
 
 	logger.Debug("Connect to SphinxQL")
 	// set up search
-	logger.Debug(strings.Trim(conf.SphinxQL.Username+":"+conf.SphinxQL.Password+"@tcp("+conf.SphinxQL.Hostname+":"+strconv.Itoa(conf.SphinxQL.Port)+")/"+conf.SphinxQL.Database, "\x00"))
-	db2, err := sql.Open("mysql", strings.Trim(conf.SphinxQL.Username+":"+conf.SphinxQL.Password+"@tcp("+conf.SphinxQL.Hostname+":"+strconv.Itoa(conf.SphinxQL.Port)+")/"+conf.SphinxQL.Database, "\x00"))
+	db2, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%v)/%s", conf.SphinxQL.Username, conf.SphinxQL.Password, conf.SphinxQL.Hostname, conf.SphinxQL.Port, conf.SphinxQL.Database))
 	if err != nil {
+		logger.Error(err.Error())
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	if err = db2.Ping(); err != nil {
 		logger.Error(err.Error())
 		fmt.Println(err)
 		os.Exit(1)
@@ -109,6 +114,6 @@ func main() {
 	}
 
 	// create request handler
-	logger.Debug("Start listening at port %v", conf.Server.Port)
+	logger.Debug(" Start listening at port %v", conf.Server.Port)
 	panic(http.ListenAndServe(conf.Server.Hostname+":"+strconv.Itoa(conf.Server.Port), api.CreateHandler(db, db2, house, d)))
 }
