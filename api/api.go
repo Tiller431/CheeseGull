@@ -130,7 +130,7 @@ func CreateHandler(db, searchDB *sql.DB, house *housekeeper.House, dlc *download
 				debug.PrintStack()
 			}()
 			h.f(ctx)
-			logger.Request("%-10s %-4s %s",
+			logger.Request(" %-10s %-4s %s",
 				time.Since(start).String(),
 				r.Method,
 				r.URL.Path,
