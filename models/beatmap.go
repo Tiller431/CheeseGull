@@ -69,6 +69,14 @@ func sIntToSInterface(i []int) []interface{} {
 	return args
 }
 
+func sStringToSInterface(s []string) []interface{} {
+	args := make([]interface{}, len(s))
+	for strx, str := range s {
+		args[strx] = str
+	}
+	return args
+}
+
 // FetchBeatmaps retrieves a list of beatmap knowing their IDs.
 func FetchBeatmaps(db *sql.DB, ids ...int) ([]Beatmap, error) {
 	if len(ids) == 0 {
@@ -83,6 +91,21 @@ func FetchBeatmaps(db *sql.DB, ids ...int) ([]Beatmap, error) {
 	}
 
 	return readBeatmapsFromRows(rows, len(ids))
+}
+
+func FetchBeatmapbyHash(db *sql.DB, hashes ...string) ([]Beatmap, error) {
+	if len(hashes) == 0 {
+		return nil, nil
+	}
+
+	q := `SELECT ` + beatmapFields + ` FROM beatmaps WHERE file_md5 IN (` + inClause(len(hashes)) + `)`
+
+	rows, err := db.Query(q, sStringToSInterface(hashes)...)
+	if err != nil {
+		return nil, err
+	}
+
+	return readBeatmapsFromRows(rows, len(hashes))
 }
 
 // CreateBeatmaps adds beatmaps in the database.

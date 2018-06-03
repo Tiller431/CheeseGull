@@ -32,6 +32,27 @@ func Beatmap(c *api.Context) {
 	c.WriteJSON(200, bms[0])
 }
 
+func Hash(c *api.Context) {
+	hash := strings.TrimSuffix(c.Param("hash"), ".json")
+	if hash == "" {
+		c.WriteJSON(404, nil)
+		return
+	}
+
+	bms, err := models.FetchBeatmapbyHash(c.DB, hash)
+	if err != nil {
+		c.Err(err)
+		c.WriteJSON(500, nil)
+		return
+	}
+	if len(bms) == 0 {
+		c.WriteJSON(404, nil)
+		return
+	}
+
+	c.WriteJSON(200, bms[0])
+}
+
 // Set handles requests to retrieve single beatmap sets.
 func Set(c *api.Context) {
 	id, _ := strconv.Atoi(strings.TrimSuffix(c.Param("id"), ".json"))
@@ -114,6 +135,8 @@ func Search(c *api.Context) {
 func init() {
 	api.GET("/api/b/:id", Beatmap)
 	api.GET("/b/:id", Beatmap)
+	api.GET("/api/hash/:hash", Hash)
+	api.GET("/hash/:hash", Hash)
 	api.GET("/api/s/:id", Set)
 	api.GET("/s/:id", Set)
 
