@@ -95,7 +95,7 @@ func SearchSets(db, searchDB *sql.DB, opts SearchOptions) ([]Set, error) {
 		}
 
 		// set limit
-		setIDsQuery += " ORDER BY WEIGHT() DESC, id DESC " + limit + " OPTION ranker=sph04, max_matches=20000 "
+		setIDsQuery += " ORDER BY WEIGHT() DESC, id DESC, approved_date DESC " + limit + " OPTION ranker=sph04, max_matches=20000 "
 		limit = ""
 
 		// fetch rows
@@ -132,7 +132,7 @@ func SearchSets(db, searchDB *sql.DB, opts SearchOptions) ([]Set, error) {
 		havingConds = " HAVING " + havingConds
 	}
 	setsQuery := "SELECT " + setFields + ", set_modes & " + sm + " AS valid_set_modes FROM sets " +
-		whereConds + havingConds + " ORDER BY id DESC " + limit
+		whereConds + havingConds + " ORDER BY approved_date DESC " + limit
 	rows, err := db.Query(setsQuery)
 
 	if err != nil {
