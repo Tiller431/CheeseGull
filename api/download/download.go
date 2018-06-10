@@ -100,6 +100,8 @@ func Download(c *api.Context) {
 	c.WriteHeader("Content-Length", strconv.FormatUint(uint64(cbm.FileSize()), 10))
 	c.Code(200)
 
+	c.IncreaseBM()
+
 	_, err = io.Copy(c, f)
 	if err != nil {
 		c.Err(err)

@@ -113,6 +113,8 @@ func main() {
 		go dbmirror.DiscoverEvery(c, db, time.Hour*6, time.Second*20)
 	}
 
+	go api.DDOG()
+
 	// create request handler
 	logger.Debug(" Start listening at port %v", conf.Server.Port)
 	panic(http.ListenAndServe(conf.Server.Hostname+":"+strconv.Itoa(conf.Server.Port), api.CreateHandler(db, db2, house, d)))

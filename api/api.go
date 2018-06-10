@@ -6,14 +6,17 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"runtime/debug"
 	"time"
 
+	"github.com/DataDog/datadog-go/statsd"
 	raven "github.com/getsentry/raven-go"
 	"github.com/julienschmidt/httprouter"
+	"github.com/paulbellamy/ratecounter"
 
 	"github.com/Gigamons/cheesegull/downloader"
 	"github.com/Gigamons/cheesegull/housekeeper"
@@ -31,6 +34,9 @@ type Context struct {
 	writer   http.ResponseWriter
 	params   httprouter.Params
 }
+
+var RSLR = ratecounter.NewAvgRateCounter(time.Second * 60)
+var BMSLR = ratecounter.NewAvgRateCounter(time.Second * 60)
 
 // Write writes content to the response body.
 func (c *Context) Write(b []byte) (int, error) {
@@ -55,6 +61,14 @@ func (c *Context) Code(i int) {
 // Param retrieves a parameter in the URL's path.
 func (c *Context) Param(s string) string {
 	return c.params.ByName(s)
+}
+
+func (c *Context) IncreaseR() {
+	RSLR.Incr(1)
+}
+
+func (c *Context) IncreaseBM() {
+	BMSLR.Incr(1)
 }
 
 // WriteJSON writes JSON to the response.
@@ -130,6 +144,7 @@ func CreateHandler(db, searchDB *sql.DB, house *housekeeper.House, dlc *download
 				debug.PrintStack()
 			}()
 			h.f(ctx)
+			ctx.IncreaseR()
 			logger.Request(" %-10s %-4s %s",
 				time.Since(start).String(),
 				r.Method,
@@ -138,6 +153,37 @@ func CreateHandler(db, searchDB *sql.DB, house *housekeeper.House, dlc *download
 		})
 	}
 	return r
+}
+
+func DDOG() {
+	c, err := statsd.New("127.0.0.1:8125")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer c.Close()
+	c.Namespace = "Cheesegull"
+	go func() {
+		for {
+			err = c.Count("BMPM", BMSLR.Hits(), nil, BMSLR.Rate())
+			if err != nil {
+				fmt.Println(err)
+			}
+			time.Sleep(time.Second * 19)
+		}
+	}()
+	go func() {
+		for {
+			err = c.Count("RSLR", RSLR.Hits(), nil, RSLR.Rate())
+			if err != nil {
+				fmt.Println(err)
+			}
+			time.Sleep(time.Second * 19)
+		}
+	}()
+	for {
+		time.Sleep(time.Second * 19)
+	}
 }
 
 type stringer interface {
