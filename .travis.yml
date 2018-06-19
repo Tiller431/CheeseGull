@@ -4,7 +4,7 @@ go:
   - 1.10.x
 
 before_install:
-  - go get -d -v github.com/gigamons/cheesegull
+  - go get -d -v github.com/Gigamons/cheesegull
 
 script:
   - go build -v cheesegull.go
