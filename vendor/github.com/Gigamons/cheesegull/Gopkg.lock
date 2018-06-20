@@ -2,28 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/DataDog/datadog-go"
-  packages = ["statsd"]
-  revision = "e67964b4021ad3a334e748e8811eb3cd6becbc6e"
-  version = "2.1.0"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/Gigamons/cheesegull"
-  packages = [
-    "api",
-    "api/download",
-    "api/metadata",
-    "config",
-    "dbmirror",
-    "downloader",
-    "housekeeper",
-    "logger",
-    "models"
-  ]
-  revision = "2c807a9b3355e492de0ad4cdd2c8438fd484d312"
-
-[[projects]]
   name = "github.com/certifi/gocertifi"
   packages = ["."]
   revision = "3fd9e1adb12b72d2f3f82191d49be9b93c69f67c"
@@ -66,12 +44,6 @@
   version = "v0.0.3"
 
 [[projects]]
-  name = "github.com/paulbellamy/ratecounter"
-  packages = ["."]
-  revision = "524851a93235ac051e3540563ed7909357fe24ab"
-  version = "v0.2.0"
-
-[[projects]]
   name = "github.com/thehowl/go-osuapi"
   packages = ["."]
   revision = "b918f5da725805d82655d6c402eb3fc0517c072f"
@@ -86,6 +58,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "af69527dd20ca1e673ecdf7667eea10c3d2f6c32385eed79c855666efd9693df"
+  inputs-digest = "501cabc456c873dba03475233913bad944f0d1e577b3be88004269801187fdea"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -1,0 +1,13 @@
+sudo: false
+language: go
+go:
+  - 1.10.x
+
+before_install:
+  - go get -d -v github.com/Gigamons/cheesegull
+
+script:
+  - go build -v cheesegull.go
+
+after_success:
+  - test -n "$TRAVIS_TAG" && curl -sL https://git.io/goreleaser | bash

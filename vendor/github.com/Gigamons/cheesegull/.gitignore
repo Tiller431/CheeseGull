@@ -1,0 +1,6 @@
+/cheesegull
+/data/*
+!/data/.gitkeep
+config.json
+gomon_spawn
+dist/
