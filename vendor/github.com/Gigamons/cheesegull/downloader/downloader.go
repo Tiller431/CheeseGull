@@ -12,6 +12,7 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/Gigamons/cheesegull/logger"
 )
@@ -103,6 +104,18 @@ func (c *Client) getReader(str string) (io.ReadCloser, error) {
 	if resp.Request.URL.Host == "old.ppy.sh" {
 		resp.Body.Close()
 		return nil, ErrNoRedirect
+	}
+
+	x := bytes.NewBuffer(nil)
+
+	io.Copy(x, resp.Body)
+
+	z, err := ioutil.ReadAll(x)
+	if err != nil {
+		return nil, err
+	}
+	if strings.HasPrefix(string(z), "<html>") {
+		return nil, errors.New("Server down")
 	}
 
 	return resp.Body, nil
