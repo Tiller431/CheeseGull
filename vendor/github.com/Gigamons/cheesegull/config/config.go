@@ -13,7 +13,7 @@ type Config struct {
 		ShouldDiscover   bool
 		UnrankedBeatmaps bool
 		Website          string
-		BMCacheSize      float64
+		BMCacheSize      uint64
 		Hostname         string
 		Port             int
 		Debug            bool

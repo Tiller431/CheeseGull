@@ -8,6 +8,7 @@ import (
 	"sort"
 	"sync"
 
+	"github.com/Gigamons/cheesegull/logger"
 	raven "github.com/getsentry/raven-go"
 )
 
@@ -107,6 +108,7 @@ func (h *House) mapsToRemove() []*CachedBeatmap {
 	if totalSize <= h.MaxSize {
 		// no clean up needed, our totalSize has still not gotten over the
 		// threshold
+		logger.Debug("No debug needed")
 		return nil
 	}
 
